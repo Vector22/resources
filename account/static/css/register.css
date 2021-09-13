@@ -1,0 +1,15 @@
+.card {
+    border-radius: 1rem !important;
+}
+
+.register-main {
+    background-color: #508bfc;
+    font-size: medium;
+}
+
+.card-body {
+    padding: 3rem !important;
+}
+form {
+    background-color: #fff;
+}

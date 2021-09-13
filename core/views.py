@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Resource
+from .models import Reservation, Resource
 
 
 def resource_list(request, type_slug=None):
@@ -14,15 +14,18 @@ def resource_list(request, type_slug=None):
         resources = resources.filter(type__slug=type_slug)
     context = {
         'resources': resources,
+        'news': resources.order_by('created')[:3],
     }
-    return render(request, 'core/resource/list.html', context)
+    return render(request, 'core/resource_list.html', context)
 
 
 def resource_detail(request, type_slug, resource_slug):
     resource = get_object_or_404(Resource,
-                                 type_slug=type_slug,
-                                 resource_slug=resource_slug)
+                                 type__slug=type_slug,
+                                 slug=resource_slug)
+    reservations = Reservation.objects.filter(resource=resource)
     context = {
         'resource': resource,
+        'reservations': reservations,
     }
-    return render(request, 'core/resource/detail.html', context)
+    return render(request, 'core/resource_detail.html', context)

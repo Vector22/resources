@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/resource_detail.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="content container" style="margin: auto; max-width: 98vw; padding: 5rem; font-size: large;">
+    <div class="sections row">
+
+        <section class="main col-md-8 col-lg-8 col-sm-8 row">
+            <div class="card w-75">
+                <img src="{{ resource.picture.url }}" class="card-img-top" alt="resource image" style="height: 50rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ resource.name }}</h5>
+                    <p class="card-text">{{ resource.description }}</p>
+                    <a href="#" class="btn btn-primary btn-lg">Make a reservation</a>
+                </div>
+            </div>
+        </section>
+        <section class="sidebar col-md-4 col-lg-4 col-sm-4">
+            {% if reservations %}
+            {% for res in reservations %}
+            <div class="card w-90">
+                <div class="card-body">
+                    <h5 class="card-title">{{ res.title }}</h5>
+                    <p class="card-text">{{ res.overview }}</p>
+                    <div class="row">
+                        <p class="card-text col-lg-6">{{ res.start_date }}</p>
+                        <p class="card-text col-lg-6">{{ res.end_date }}</p>
+                    </div>
+
+                    <!-- <a href="#" class="btn btn-primary btn-lg">Make a reservation</a> -->
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="card w-90">
+                <div class="card-body">
+                    <h5 class="card-title">No reservation for this resource</h5>
+                    <p class="card-text">
+                        <a href="#" class="btn btn-primary btn-lg">Make a reservation</a>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

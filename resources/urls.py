@@ -23,6 +23,7 @@ from core.views import resource_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('account/', include('account.urls')),
     # We want to display the list of resource in the URL http://127.0.0.1:8000/
     # and all other URLs for the core app have the /core/resource/ prefix.
     path('', resource_list, name='home'),
