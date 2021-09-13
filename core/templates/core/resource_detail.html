@@ -7,8 +7,8 @@
 
 {% block content %}
 <div class="content container" style="margin: auto; max-width: 98vw; padding: 5rem; font-size: large;">
-    <div class="sections row">
 
+    <div class="sections row">
         <section class="main col-md-8 col-lg-8 col-sm-8 row">
             <div class="card w-75">
                 <img src="{{ resource.picture.url }}" class="card-img-top" alt="resource image" style="height: 50rem;">
@@ -17,18 +17,79 @@
                     <p class="card-text">{{ resource.description }}</p>
                     <a href="#" class="btn btn-primary btn-lg">Make a reservation</a>
                 </div>
+                <div class="card-body">
+                    <h5 class="card-title">Fill the form</h5>
+                    <div class="row">
+                        <!-- Django messages -->
+                        {% include 'includes/alerts.html' %}
+                        <!-- End messages -->
+                    </div>
+                    <form method="POST" action=".">
+                        {% csrf_token %}
+
+                        {{ form.non_field_errors }}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="title">Title : </label>
+                                <!-- <input type="text" class="form-control form-control-lg" name="title"> -->
+                                {{ form.title.errors }}
+                                {{ form.title }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="overview">Overview : </label>
+                                <!-- <textarea class="form-control form-control-lg" name="overview" rows="1"></textarea>
+                                    -->
+                                {{ form.overview.errors }}
+                                {{ form.overview }}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-lg-6">
+                                <label for="start-date">Start date : </label>
+                                <!-- <input type="datetime-local" class="form-control form-control-lg" name="start-date"
+                                        min="2020-01-01" max="2025-12-31" required> -->
+                                {{ form.start_date.errors }}
+                                {{ form.start_date }}
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="end-date">End date : </label>
+                                <!-- <input type="datetime-local" class="form-control form-control-lg" name="end-date"
+                                        min="2020-01-01" max="2025-12-31"> -->
+                                {{ form.end_date.errors }}
+                                {{ form.end_date }}
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg">Confirm</button>
+                    </form>
+                </div>
             </div>
         </section>
         <section class="sidebar col-md-4 col-lg-4 col-sm-4">
+            <div class="card w-90 text-center rounded border border-info font-weight-bold bg-light mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Date of the day</h5>
+                    <p class="card-text" id="date-time">
+                    </p>
+                </div>
+            </div>
             {% if reservations %}
             {% for res in reservations %}
-            <div class="card w-90">
-                <div class="card-body">
+            <div class="card w-100 mb-4">
+                <div class="card-body {{ res.status }}">
                     <h5 class="card-title">{{ res.title }}</h5>
                     <p class="card-text">{{ res.overview }}</p>
                     <div class="row">
-                        <p class="card-text col-lg-6">{{ res.start_date }}</p>
-                        <p class="card-text col-lg-6">{{ res.end_date }}</p>
+                        <p class="card-text col-lg-6">
+                            <i class="fas fa-clock text-success"> Begin : </i>
+                            {{ res.start_date | date:"l d F Y, H:i" }}
+                        </p>
+                        <p class="card-text col-lg-6">
+                            <i class="fas fa-clock text-danger"> End : </i>
+                            {{ res.end_date | date:"l d F Y, H:i" }}
+                        </p>
                     </div>
 
                     <!-- <a href="#" class="btn btn-primary btn-lg">Make a reservation</a> -->
@@ -36,7 +97,7 @@
             </div>
             {% endfor %}
             {% else %}
-            <div class="card w-90">
+            <div class="card w-90 mb-4">
                 <div class="card-body">
                     <h5 class="card-title">No reservation for this resource</h5>
                     <p class="card-text">
@@ -45,6 +106,7 @@
                 </div>
             </div>
             {% endif %}
+
         </section>
 
     </div>
@@ -52,4 +114,40 @@
 {% endblock %}
 
 {% block footer %}
+{% endblock %}
+
+{% block js %}
+<!-- Show the current date and time -->
+<script>
+    function displayTime() {
+        const today = new Date();
+        let y = today.getFullYear();
+        let mon = today.getMonth();
+        let d = today.getDate();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        mon = formatMonth(mon);
+        m = checkTime(m);
+        s = checkTime(s);
+
+        dateString = d + "/" + mon + "/" + y + " " + h + "hr:" + m + "min:" + s + "s";
+        document.getElementById('date-time').innerHTML = dateString;
+        setTimeout(displayTime, 1000);
+    }
+
+    function checkTime(i) {
+        // add zero in front of numbers < 10
+        if (i < 10) { i = "0" + i };
+        return i;
+    }
+
+    function formatMonth(m) {
+        // The getMonth() return [0 - 11].
+        // By doing this, i return [1 - 12]
+        return m + 1;
+    }
+
+    displayTime();
+</script>
 {% endblock %}

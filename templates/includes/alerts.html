@@ -1,0 +1,20 @@
+{% if messages %}
+{% for message in messages %}
+<div id="message" class="container">
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %} role="alert">
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true"> &times; </span>
+        </button>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- The alert message will be removed after 10s(10000ms) -->
+<script>
+    setTimeout(function () {
+        document.getElementById('message').remove()
+    }, 10000);
+</script>

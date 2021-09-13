@@ -11,6 +11,7 @@ class ReservationAdmin(admin.ModelAdmin):
     search_fields = (
         'title',
         'overview',
+        'user',
     )
     date_hierarchy = 'created'
     ordering = ('status', 'created')
@@ -19,7 +20,7 @@ class ReservationAdmin(admin.ModelAdmin):
 
 class ReservationInline(admin.TabularInline):
     model = Reservation
-    fields = ('title', 'overview', 'status', 'start_date', 'end_date')
+    fields = ('title', 'overview', 'status', 'user', 'start_date', 'end_date')
     extra = 1
 
 

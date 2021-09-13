@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class AvailableManager(models.Manager):
@@ -95,7 +96,6 @@ class Reservation(models.Model):
     """ A reservation model that used to reserve resources """
 
     STATUS_CHOICES = (
-        ('draft', 'Draft'),
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('in_progress', 'In Progress'),
@@ -106,7 +106,7 @@ class Reservation(models.Model):
     overview = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=15,
                               choices=STATUS_CHOICES,
-                              default='draft')
+                              default='pending')
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     start_date = models.DateTimeField()
@@ -115,6 +115,10 @@ class Reservation(models.Model):
     resource = models.ForeignKey(Resource,
                                  default=None,
                                  on_delete=models.CASCADE)
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             related_name='reservations',
+                             default=1)
 
     def __str__(self) -> str:
         return f"{self.title} - status : {self.status}"
