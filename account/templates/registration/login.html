@@ -14,34 +14,30 @@
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-8 col-xl-5">
-                <div class="card shadow-2-strong login-box">
+                <form class="card shadow-2-strong login-box" action="{% url 'account:login' %}" method="POST">
+                    {% csrf_token %}
                     <div class="card-body p-5 text-center">
 
                         <h3 class="mb-5">Sign in</h3>
 
                         <div class="form-outline mb-4">
-                            <input type="email" id="form-email" class="form-control form-control-lg" />
-                            <label class="col-form-label col-form-label-lg" for="form-email">Email</label>
+                            {{ form.username }}
+                            <label class="col-form-label col-form-label-lg" for="form-email">Username</label>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <input type="password" id="form-pass" class="form-control form-control-lg" />
+                            {{ form.password }}
                             <label class="col-form-label col-form-label-lg" for="form-pass">Password</label>
                         </div>
-
-                        <!-- Checkbox If i need to remember user password-->
-                        <!-- <div class="form-check d-flex justify-content-start mb-4">
-                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                            <label class="form-check-label" for="form1Example3"> Remember password </label>
-                        </div> -->
 
                         <button class="btn btn-outline-primary btn-lg btn-block" type="submit">Login</button>
 
                         <div class="my-4">
-                            <p>Don't have an account? <a href="#!" class="link-info">Register here</a></p>
+                            <p>Don't have an account? <a href="{% url 'account:register' %}" class="link-info">Register
+                                    here</a></p>
                         </div>
 
-                        <!-- If i need social auth one day -->
+                        <!-- If i need social auth -->
 
                         <!-- <hr class="my-4">
 
@@ -51,7 +47,7 @@
                             type="submit"><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</button> -->
 
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -61,4 +57,17 @@
 
 {% block footer %}
 <!--  -->
+{% endblock %}
+
+{% block js %}
+<!-- Add some class to default django input form -->
+<script>
+    let inputs = document.getElementsByTagName('input');
+
+    for (i = 0; i < inputs.length; i++) {
+        inputs[i].className = "form-control form-control-lg"
+        console.log(inputs[i]);
+    }
+
+</script>
 {% endblock %}

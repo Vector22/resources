@@ -13,3 +13,7 @@
 form {
     background-color: #fff;
 }
+
+li {
+    list-style-type: none;
+}
