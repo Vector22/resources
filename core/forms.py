@@ -31,7 +31,7 @@ class ReservationModelForm(forms.ModelForm):
         self.fields['title'].widget.attrs[
             'placeholder'] = 'Title of reservation'
         self.fields['title'].widget.attrs['name'] = 'title'
-        self.fields['overview'].widget.attrs['rows'] = '1'
+        self.fields['overview'].widget.attrs['rows'] = '2'
         self.fields['overview'].widget.attrs['placeholder'] = 'Small overview'
         self.fields['overview'].widget.attrs['name'] = 'overview'
         self.fields['start_date'].widget.attrs['name'] = 'start_date'

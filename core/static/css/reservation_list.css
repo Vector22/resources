@@ -18,14 +18,10 @@
     border-color: #ffeeba;
 }
 
-
-/* Post reservation error style */
-.alert-error {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-
 a:hover {
     text-decoration: none;
+}
+
+img {
+    height: 30rem;
 }

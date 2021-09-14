@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib import messages
+from django.views.generic import (UpdateView, DeleteView)
 from core.models import Reservation, Resource
 from core.forms import ReservationModelForm
 from core.utils import overlap
@@ -77,3 +79,67 @@ def resource_detail(request, type_slug, resource_slug):
             'reservations': reservations,
         }
         return render(request, 'core/resource_detail.html', context)
+
+
+def reservation_list(request):
+    reservations = Reservation.objects.all()
+
+    # Retrieve all reservations and group them by resource
+    res_by_resource = [
+        Reservation.objects.filter(resource__slug=resource.slug)
+        for resource in Resource.available.all()
+    ]
+
+    context = {
+        'reservations': reservations,
+        'res_by_resource': res_by_resource,
+    }
+
+    return render(request, 'core/reservation_list.html', context)
+
+
+def reservation_detail(request, resource_slug, pk):
+    resource = get_object_or_404(Resource, slug=resource_slug)
+    reservation = get_object_or_404(Reservation, id=pk)
+
+    context = {
+        'resource': resource,
+        'reservation': reservation,
+    }
+
+    return render(request, 'core/reservation_detail.html', context)
+
+
+# Let use CBV for update/detail and delete reservation
+class ReservationUpdateView(UpdateView):
+
+    model = Reservation
+    fields = ['title', 'overview', 'start_date', 'end_date']
+
+    template_name = 'core/reservation_detail.html'
+    context_object_name = 'reserv'
+
+    def get_success_url(self):
+        return reverse_lazy('core:reserv_detail',
+                            kwargs={
+                                'slug': self.object.budget.slug,
+                            })
+
+    def get(self, request, *args, **kwargs):
+        self.obj = get_object_or_404(Reservation, id=self.kwargs.get('pk'))
+        self.resource = get_object_or_404(
+            Resource, slug=self.kwargs.get('resource_slug'))
+
+        # Try to increase the number of the form textarea row but don't work
+        ReservationModelForm.base_fields['overview'].widget.attrs['rows'] = '3'
+
+        self.form = ReservationModelForm(instance=self.obj,
+                                         initial={
+                                             'start_date': self.obj.start_date,
+                                             'end_date': self.obj.end_date,
+                                         })
+        return render(request, self.template_name, {
+            "reserv": self.obj,
+            "form": self.form,
+            "resource": self.resource
+        })

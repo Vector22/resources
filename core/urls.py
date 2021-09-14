@@ -5,7 +5,12 @@ from core import views
 app_name = 'core'
 
 urlpatterns = [
-    # resource views
+    # Reservation views
+    path('reservation/', views.reservation_list, name='reserv_list'),
+    path('<slug:resource_slug>/reservation/<int:pk>/',
+         views.ReservationUpdateView.as_view(),
+         name='reserv_detail'),
+    # Resources views
     path('<slug:type_slug>/', views.resource_list, name='resource_list'),
     path('<slug:type_slug>/<slug:resource_slug>/',
          views.resource_detail,

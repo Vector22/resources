@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/reservation_list.css' %}" type="text/css">
+{% endblock %}
+
+
+{% block content %}
+<div class="content container" style="margin: auto; max-width: 98vw; padding: 5rem; font-size: large;">
+    <div class="sections row">
+        <section class="main col-md-12 col-lg-12 col-sm-12 row">
+            {% for reservations in res_by_resource %}
+            <!-- Display only resource that have some reservations -->
+            {% if reservations %}
+            <div class="card col-lg-5 col-sm-12" style="margin: 2rem;">
+                <img src="{{ reservations.0.resource.picture.url }}" class="card-img-top" alt="resource image">
+                <div class="card-body">
+                    <h2>Reservations for this resource</h2>
+                </div>
+
+                {% for res in reservations %}
+                <div class="card-body {{ res.status }} mb-2">
+                    <h5 class="card-title">{{ res.title }}</h5>
+                    <p class="card-text">{{ res.overview }}</p>
+                    <div class="row">
+                        <p class="card-text col-lg-6">
+                            <i class="fas fa-clock text-success"> Begin : </i>
+                            {{ res.start_date | date:"l d F Y, H:i" }}
+                        </p>
+                        <p class="card-text col-lg-6">
+                            <i class="fas fa-clock text-danger"> End : </i>
+                            {{ res.end_date | date:"l d F Y, H:i" }}
+                        </p>
+                    </div>
+                    <a href="{% url 'core:reserv_detail' res.resource.slug res.id %}" class="btn btn-primary">View
+                        details</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </section>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<!--  -->
+{% endblock %}
