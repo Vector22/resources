@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/logout.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+<section class="vh-100 login-main">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-8 col-xl-5">
+                <div class="card shadow-2-strong ">
+                    <h1>Logged out</h1>
+                    <p>
+                        You have been successfully logged out.
+                        You can <a href="{% url 'account:login' %}">log-in again</a>.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block footer %}
+<!--  -->
+{% endblock %}

@@ -2,6 +2,9 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import (UpdateView, DeleteView)
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
 from core.models import Reservation, Resource
 from core.forms import ReservationModelForm
 from core.utils import overlap
@@ -81,23 +84,32 @@ def resource_detail(request, type_slug, resource_slug):
         return render(request, 'core/resource_detail.html', context)
 
 
+@login_required
 def reservation_list(request):
-    reservations = Reservation.objects.all()
+    user = request.user
 
-    # Retrieve all reservations and group them by resource
-    res_by_resource = [
-        Reservation.objects.filter(resource__slug=resource.slug)
-        for resource in Resource.available.all()
-    ]
+    if user.is_staff:
+        # Retrieve all reservations and group them by resource
+        # The admin users see all the reservations
+        res_by_resource = [
+            Reservation.objects.filter(resource__slug=resource.slug)
+            for resource in Resource.available.all()
+        ]
+    else:
+        # The non admin user see only its own reservartions
+        res_by_resource = [
+            Reservation.objects.filter(resource__slug=resource.slug).filter(
+                user_id=user.id) for resource in Resource.available.all()
+        ]
 
     context = {
-        'reservations': reservations,
         'res_by_resource': res_by_resource,
     }
 
     return render(request, 'core/reservation_list.html', context)
 
 
+@login_required
 def reservation_detail(request, resource_slug, pk):
     resource = get_object_or_404(Resource, slug=resource_slug)
     reservation = get_object_or_404(Reservation, id=pk)
@@ -111,7 +123,7 @@ def reservation_detail(request, resource_slug, pk):
 
 
 # Let use CBV for update/detail and delete reservation
-class ReservationUpdateView(UpdateView):
+class ReservationUpdateView(LoginRequiredMixin, UpdateView):
 
     model = Reservation
     fields = ['title', 'overview', 'start_date', 'end_date']

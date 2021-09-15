@@ -1,1 +1,28 @@
-<h1>Hello you are on the dashboard</h1>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="content container" style="margin: auto; max-width: 98vw; padding: 5rem; font-size: large;">
+    <div class="sections row">
+
+        <section class="main col-md-8 col-lg-8 col-sm-8 offset-2 row">
+            <div class="card col-lg-12 col-sm-12" style="margin: 2rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    <p class="card-text">{{ user.profile.time_zone }}</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<!--  -->
+{% endblock %}

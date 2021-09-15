@@ -9,11 +9,19 @@
 {% block content %}
 <div class="content container" style="margin: auto; max-width: 98vw; padding: 5rem; font-size: large;">
     <div class="sections row">
+        <section class="col-md-11 col-lg-11 col-sm-11">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">Reservation</h1>
+                    <p class="display-6">This is the list of yours reservations according to resources.</p>
+                </div>
+            </div>
+        </section>
         <section class="main col-md-12 col-lg-12 col-sm-12 row">
             {% for reservations in res_by_resource %}
             <!-- Display only resource that have some reservations -->
             {% if reservations %}
-            <div class="card col-lg-5 col-sm-12" style="margin: 2rem;">
+            <div class="card col-lg-5 col-sm-12 ml-4 mb-4">
                 <img src="{{ reservations.0.resource.picture.url }}" class="card-img-top" alt="resource image">
                 <div class="card-body">
                     <h2>Reservations for this resource</h2>
@@ -21,7 +29,11 @@
 
                 {% for res in reservations %}
                 <div class="card-body {{ res.status }} mb-2">
+                    {% if user.is_staff %}
+                    <h5 class="card-title">{{ res.title }} | Requested by {{res.user.username}}</h5>
+                    {% else %}
                     <h5 class="card-title">{{ res.title }}</h5>
+                    {% endif %}
                     <p class="card-text">{{ res.overview }}</p>
                     <div class="row">
                         <p class="card-text col-lg-6">
