@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ resource.name }}</h5>
                     <p class="card-text">{{ resource.description }}</p>
-                    <a href="#" class="btn btn-primary btn-lg">Make a reservation</a>
+                    <h1><span class="badge badge-primary">Make a reservation</span></h1>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Fill the form</h5>
@@ -62,7 +62,19 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg">Confirm</button>
+                        {% if user.is_authenticated %}
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Confirm
+                        </button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary btn-lg" disabled>
+                            Confirm
+                        </button>
+                        <p>
+                            <small class="text-muted">
+                                <a href="{% url 'account:login' %}">Login</a> to make a reservation</small>
+                        </p>
+                        {% endif %}
                     </form>
                 </div>
             </div>
@@ -80,7 +92,11 @@
             <a href="{% url 'core:reserv_detail' res.resource.slug res.id %}">
                 <div class="card w-100 mb-4">
                     <div class="card-body {{ res.status }}">
+                        {% if user.is_staff %}
+                        <h5 class="card-title">{{ res.title }} | Requested by {{res.user.username}}</h5>
+                        {% else %}
                         <h5 class="card-title">{{ res.title }}</h5>
+                        {% endif %}
                         <p class="card-text">{{ res.overview }}</p>
                         <div class="row">
                             <p class="card-text col-lg-6">
@@ -99,10 +115,11 @@
             {% else %}
             <div class="card w-90 mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">No reservation for this resource</h5>
-                    <p class="card-text">
-                        <a href="#" class="btn btn-primary btn-lg">Make a reservation</a>
-                    </p>
+                    {% if user.is_staff %}
+                    No reservation for this resource.
+                    {% else %}
+                    You are no reservation done on this resource.
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
