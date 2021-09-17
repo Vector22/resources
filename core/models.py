@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class AvailableManager(models.Manager):
@@ -24,8 +25,8 @@ class ResourceType(models.Model):
         return f"{self.name}"
 
     class Meta:
-        verbose_name = 'Resource Type'
-        verbose_name_plural = 'Resource Types'
+        verbose_name = _('Resource Type')
+        verbose_name_plural = _('Resource Types')
 
 
 class Resource(models.Model):
@@ -60,7 +61,6 @@ class Resource(models.Model):
 
     def get_absolute_url(self):
         type_slug = self.type.slug
-        print(f"\n\ntype slug: {type_slug}\n\n")
         # We will use this method to link specific resource in template
         return reverse_lazy('core:resource_detail',
                             kwargs={
@@ -69,7 +69,7 @@ class Resource(models.Model):
                             })
 
     def __str__(self) -> str:
-        return f"{self.name} ( {self.price}€ / hour )"
+        return _("{} ( {}€ / hour )").format(self.name, self.price)
 
 
 class ResourceGallery(models.Model):
@@ -85,7 +85,8 @@ class ResourceGallery(models.Model):
     picture = models.ImageField(upload_to=_upload_link, max_length=200)
 
     def __str__(self) -> str:
-        return f"Gallery picture {self.id} for {self.resource.name}"
+        return _("Gallery picture {} for {}").format(self.id,
+                                                     self.resource.name)
 
     class Meta:
         verbose_name = 'Resource Gallery'
@@ -96,11 +97,11 @@ class Reservation(models.Model):
     """ A reservation model that used to reserve resources """
 
     STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('confirmed', 'Confirmed'),
-        ('in_progress', 'In Progress'),
-        ('ended', 'Ended'),
-        ('canceled', 'Canceled'),
+        ('pending', _('Pending')),
+        ('confirmed', _('Confirmed')),
+        ('in_progress', _('In Progress')),
+        ('ended', _('Ended')),
+        ('canceled', _('Canceled')),
     )
     title = models.CharField(max_length=200)
     overview = models.TextField(null=True, blank=True)
@@ -121,4 +122,4 @@ class Reservation(models.Model):
                              default=1)
 
     def __str__(self) -> str:
-        return f"{self.title} - status : {self.status}"
+        return _("{} - status : {}").format(self.title, self.status)

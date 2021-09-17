@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/reservation_detail.css' %}" type="text/css">
@@ -17,7 +18,7 @@
                     <p class="card-text">{{ resource.description }}</p>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Update the reservation</h5>
+                    <h5 class="card-title">{% trans "Update the reservation" %}</h5>
                     <div class="row">
                         <!-- Django messages -->
                         {% include 'includes/alerts.html' %}
@@ -30,12 +31,12 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="title">Title : </label>
+                                <label for="title">{% trans "Title : " %}</label>
                                 {{ form.title.errors }}
                                 {{ form.title }}
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="overview">Overview : </label>
+                                <label for="overview">{% trans "Overview :" %} </label>
                                 {{ form.overview.errors }}
                                 {{ form.overview }}
                             </div>
@@ -43,18 +44,18 @@
 
                         <div class="form-row">
                             <div class="form-group col-lg-6">
-                                <label for="start-date">Start date : </label>
+                                <label for="start-date">{% trans "Start date :" %} </label>
                                 {{ form.start_date.errors }}
                                 {{ form.start_date }}
                             </div>
                             <div class="form-group col-lg-6">
-                                <label for="end-date">End date : </label>
+                                <label for="end-date">{% trans "End date :" %} </label>
                                 {{ form.end_date.errors }}
                                 {{ form.end_date }}
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        <button type="submit" class="btn btn-primary btn-lg">{% trans "Update" %}</button>
                     </form>
                 </div>
             </div>
@@ -62,7 +63,7 @@
         <section class="sidebar col-md-4 col-lg-4 col-sm-4">
             <div class="card w-90 text-center rounded border border-info font-weight-bold bg-light mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Date of the day</h5>
+                    <h5 class="card-title">{% trans "Date of the day" %}</h5>
                     <p class="card-text" id="date-time">
                     </p>
                 </div>
@@ -71,21 +72,26 @@
             <div class="card w-100 mb-4">
                 <div class="card-body {{ reserv.status }}">
                     {% if user.is_staff %}
-                    <h5 class="card-title">{{ reserv.title }} | Requested by {{reserv.user.username}}</h5>
+                    <h5 class="card-title">{{ reserv.title }} | {% trans "Requested by" %} {{reserv.user.username}}</h5>
                     {% else %}
                     <h5 class="card-title">{{ reserv.title }}</h5>
                     {% endif %}
                     <p class="card-text">{{ reserv.overview }}</p>
                     <div class="row">
                         <p class="card-text col-lg-6">
-                            <i class="fas fa-clock text-success"> Begin : </i>
+                            <i class="fas fa-clock text-success"> {% trans "Begin :" %} </i>
                             {{ reserv.start_date | date:"l d F Y, H:i" }}
                         </p>
                         <p class="card-text col-lg-6">
-                            <i class="fas fa-clock text-danger"> End : </i>
+                            <i class="fas fa-clock text-danger"> {% trans "End :" %} </i>
                             {{ reserv.end_date | date:"l d F Y, H:i" }}
                         </p>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'core:reserv_delete' reserv.id %}" class="btn btn-lg btn-danger">
+                        {% trans "Delete this reservation" %}
+                    </a>
                 </div>
             </div>
         </section>

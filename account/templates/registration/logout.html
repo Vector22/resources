@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/logout.css' %}" type="text/css">
@@ -11,10 +12,11 @@
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-8 col-xl-5">
                 <div class="card shadow-2-strong ">
-                    <h1>Logged out</h1>
+                    <h1>{% trans "Logged out" %}</h1>
                     <p>
-                        You have been successfully logged out.
-                        You can <a href="{% url 'account:login' %}">log-in again</a>.
+                        {% trans "You have been successfully logged out." %}
+                        {% trans "You can" %} <a href="{% url 'account:login' %}">
+                            {% trans "log-in again" %}</a>.
                     </p>
 
                 </div>

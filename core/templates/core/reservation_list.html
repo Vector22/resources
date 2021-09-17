@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/reservation_list.css' %}" type="text/css">
@@ -12,8 +13,9 @@
         <section class="col-md-11 col-lg-11 col-sm-11">
             <div class="jumbotron jumbotron-fluid">
                 <div class="container">
-                    <h1 class="display-4">Reservations</h1>
-                    <p class="display-6">This is the list of yours reservations according to resources.</p>
+                    <h1 class="display-4">{% trans "Reservations" %}</h1>
+                    <p class="display-6">{% trans "This is the list of yours reservations according to resources." %}
+                    </p>
                 </div>
             </div>
         </section>
@@ -24,29 +26,30 @@
             <div class="card col-lg-5 col-sm-12 ml-4 mb-4">
                 <img src="{{ reservations.0.resource.picture.url }}" class="card-img-top" alt="resource image">
                 <div class="card-body">
-                    <h2>Reservations for this resource</h2>
+                    <h2>{% trans "Reservations for this resource" %}</h2>
                 </div>
 
                 {% for res in reservations %}
                 <div class="card-body {{ res.status }} mb-2">
                     {% if user.is_staff %}
-                    <h5 class="card-title">{{ res.title }} | Requested by {{res.user.username}}</h5>
+                    <h5 class="card-title">{{ res.title }} | {% trans "Requested by" %} {{res.user.username}}</h5>
                     {% else %}
                     <h5 class="card-title">{{ res.title }}</h5>
                     {% endif %}
                     <p class="card-text">{{ res.overview }}</p>
                     <div class="row">
                         <p class="card-text col-lg-6">
-                            <i class="fas fa-clock text-success"> Begin : </i>
+                            <i class="fas fa-clock text-success"> {% trans "Begin :" %} </i>
                             {{ res.start_date | date:"l d F Y, H:i" }}
                         </p>
                         <p class="card-text col-lg-6">
-                            <i class="fas fa-clock text-danger"> End : </i>
+                            <i class="fas fa-clock text-danger"> {% trans "End :" %} </i>
                             {{ res.end_date | date:"l d F Y, H:i" }}
                         </p>
                     </div>
-                    <a href="{% url 'core:reserv_detail' res.resource.slug res.id %}" class="btn btn-primary">View
-                        details</a>
+                    <a href="{% url 'core:reserv_detail' res.resource.slug res.id %}" class="btn btn-primary">
+                        {% trans "View details" %}
+                    </a>
                 </div>
                 {% endfor %}
             </div>

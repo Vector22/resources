@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/register.css' %}" type="text/css">
@@ -13,18 +14,20 @@
 <section class="vh-100 register-main row d-flex justify-content-center align-items-center">
     <div class="card ">
         <div class="text-center card-header">
-            Fill this form to register
+            {% trans "Fill this form to register" %}
         </div>
 
         <form class="card-body" action="{% url 'account:register' %}" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
 
-            <button class="btn btn-outline-primary btn-lg btn-block" type="submit">Register</button>
+            <button class="btn btn-outline-primary btn-lg btn-block" type="submit">{% trans "Register" %}</button>
 
             <hr class="my-4">
             <div class="my-4">
-                <p>Already have an account? <a href="{% url 'account:login' %}" class="link-info">Login here</a></p>
+                <p>{% trans "Already have an account?" %} <a href="{% url 'account:login' %}" class="link-info">
+                        {% trans "Login here" %}</a>
+                </p>
             </div>
             <div class="my-4 text-center">
                 <!-- Return to home page -->

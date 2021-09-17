@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.views.generic import (UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext as _
 
 from core.models import Reservation, Resource
 from core.forms import ReservationModelForm
@@ -64,14 +65,15 @@ def resource_detail(request, type_slug, resource_slug):
                 # Now we can save the form
                 reservation.save()
 
-                messages.success(request, "Successfuly submit a reservation.")
+                messages.success(request,
+                                 _("Successfuly submit a reservation."))
             else:
-                error_text = "This resource is not free at this time. "
-                error_text += "Please try with another date or time."
+                error_text = _("This resource is not free at this time. ")
+                error_text += _("Please try with another date or time.")
                 messages.error(request, error_text)
         else:
             messages.error(request,
-                           "Try to correct these errors and try again.")
+                           _("Try to correct these errors and try again."))
         return redirect('core:resource_detail', type_slug, resource_slug)
     else:
         reservations = Reservation.objects.filter(resource=resource)
@@ -134,7 +136,8 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('core:reserv_detail',
                             kwargs={
-                                'slug': self.object.budget.slug,
+                                'resource_slug': self.object.resource.slug,
+                                'pk': self.object.id,
                             })
 
     def get(self, request, *args, **kwargs):
@@ -155,3 +158,12 @@ class ReservationUpdateView(LoginRequiredMixin, UpdateView):
             "form": self.form,
             "resource": self.resource
         })
+
+
+class ReservationDeleteView(LoginRequiredMixin, DeleteView):
+    model = Reservation
+    template_name = 'core/reservation_delete.html'
+    context_object_name = 'reserv'
+
+    def get_success_url(self):
+        return reverse_lazy('core:rserv_list')

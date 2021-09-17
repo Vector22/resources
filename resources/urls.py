@@ -28,6 +28,8 @@ urlpatterns = [
     # and all other URLs for the core app have the /core/resource/ prefix.
     path('', resource_list, name='home'),
     path('core/resource/', include('core.urls')),
+    # Generic i18n url
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
 if settings.DEBUG:

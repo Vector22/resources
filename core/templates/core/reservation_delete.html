@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/reservation_delete.css' %}" type="text/css">
+{% endblock %}
+
+
+{% block content %}
+<div class="container text-center mt-4" style="font-size: large;">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="text-center p-5">
+            <h1 class="display-4">{% trans "Delete reservation" %} {{ reserv.title }} </h1>
+
+            <form method="POST" action="." class="">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>{% trans "Do you confirm the deletion of" %} {{ reserv.title }} ?</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-danger btn-lg btn-block">
+                            <i class="fas fa-trash"></i>
+                            {% trans "Confirm" %}
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url 'core:reserv_detail' reserv.resource.slug reserv.id %}">
+                            <button type="button" class="btn btn-outline-secondary btn-lg btn-block">
+                                <i class="fas fa-times"></i>
+                                {% trans "Cancel" %}
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<!--  -->
+{% endblock %}

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css">
@@ -18,23 +19,28 @@
                     {% csrf_token %}
                     <div class="card-body p-5 text-center">
 
-                        <h3 class="mb-5">Sign in</h3>
+                        <h3 class="mb-5">{% trans "Sign in" %}</h3>
 
                         <div class="form-outline mb-4">
                             {{ form.username }}
-                            <label class="col-form-label col-form-label-lg" for="form-email">Username</label>
+                            <label class="col-form-label col-form-label-lg" for="form-email">
+                                {% trans "Username"%}</label>
                         </div>
 
                         <div class="form-outline mb-4">
                             {{ form.password }}
-                            <label class="col-form-label col-form-label-lg" for="form-pass">Password</label>
+                            <label class="col-form-label col-form-label-lg" for="form-pass">
+                                {% trans "Password"%}</label>
                         </div>
 
-                        <button class="btn btn-outline-primary btn-lg btn-block" type="submit">Login</button>
+                        <button class="btn btn-outline-primary btn-lg btn-block" type="submit">
+                            {% trans "Login" %}</button>
 
                         <div class="my-4">
-                            <p>Don't have an account? <a href="{% url 'account:register' %}" class="link-info">Register
-                                    here</a></p>
+                            <p>{% trans "Don't have an account?" %} <a href="{% url 'account:register' %}"
+                                    class="link-info">
+                                    {% trans "Register here" %}</a>
+                            </p>
                         </div>
 
                         <!-- If i need social auth -->
