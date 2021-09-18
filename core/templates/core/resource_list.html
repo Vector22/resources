@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load cache %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/resource_list.css' %}" type="text/css">
@@ -12,6 +13,8 @@
     <div class="sections row">
 
         <section class="main col-md-8 col-lg-8 col-sm-8 row">
+            <!-- Cache the resource template fragment for 15min (900s) -->
+            {% cache 900 resource_contents resources %}
             {% for resource in resources %}
             <div class="card col-lg-3 col-sm-4" style="margin: 2rem;">
                 <img src="{{ resource.picture.url }}" class="card-img-top" alt="resource image">
@@ -24,6 +27,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% endcache %}
         </section>
         <section class="sidebar col-md-4 col-lg-4 col-sm-4">
             <div id="carouselInd" class="carousel slide" data-ride="carousel">
@@ -33,28 +37,18 @@
                     <li data-target="#carouselInd" data-slide-to="2"></li>
                 </ol>
                 <div class="carousel-inner">
+                    <!-- Cache the carousel template fragment for 15min (900s) -->
+                    {% cache 900 new_contents news %}
                     {% for new in news %}
                     {% with forloop.counter0 as i %}
                     <div class="carousel-item {% if i is 0 %}active{% endif %}">
-                        <!-- The active image must link to this resource detail page -->
+                        <!-- TODO: The active image must link to this resource detail page -->
                         <img class="d-block w-100" src="{{ new.picture.url }}" alt="{{ new.name }}"
                             style="height: 30rem;">
                     </div>
                     {% endwith %}
                     {% endfor %}
-                    <!-- <div class="carousel-item active"> -->
-                    <!-- The active image must link to this resource detail page -->
-                    <!-- <img class="d-block w-100" src="{{ news.0.picture.url }}" alt="{{ news.0.name }}"
-                            style="height: 30rem;">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ news.1.picture.url }}" alt="{{ news.1.name }}"
-                            style="height: 30rem;">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" src="{{ news.2.picture.url }}" alt="{{ news.2.name }}"
-                            style="height: 30rem;">
-                    </div> -->
+                    {% endcache %}
                 </div>
                 <a class="carousel-control-prev" href="#carouselInd" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

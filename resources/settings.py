@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Thirds apps
+    'memcache_status',
+
     # Customs apps
     'account.apps.AccountConfig',
     'core.apps.CoreConfig',
@@ -148,6 +151,15 @@ LANGUAGES = (
     ('en', _('English')),
     ('fr', _('French')),
 )
+
+# Memcached
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 300,  # 300s or 5min for expire time
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

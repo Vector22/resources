@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.views.generic import (UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.utils.translation import gettext as _
 
 from core.models import Reservation, Resource
@@ -17,7 +18,12 @@ def resource_list(request, type_slug=None):
         the 'home' (defined in project url level) and
         the 'resource_list' (defied in core app urls).
     """
-    resources = Resource.available.all()
+
+    # Use cache here to store all the available resources queryset
+    resources = cache.get('resources')
+    if not resources:
+        resources = Resource.available.all()
+        cache.set('resources', resources)
 
     if type_slug:
         resources = resources.filter(type__slug=type_slug)
@@ -90,19 +96,31 @@ def resource_detail(request, type_slug, resource_slug):
 def reservation_list(request):
     user = request.user
 
+    # Use cache here too for the list of reservations
+    # This cache is based on dynamic data (here the user)
+
     if user.is_staff:
         # Retrieve all reservations and group them by resource
         # The admin users see all the reservations
-        res_by_resource = [
-            Reservation.objects.filter(resource__slug=resource.slug)
-            for resource in Resource.available.all()
-        ]
+        key = f'user_{user.id}_res_by_resource'
+        res_by_resource = cache.get(key)
+        if not res_by_resource:
+            res_by_resource = [
+                Reservation.objects.filter(resource__slug=resource.slug)
+                for resource in Resource.available.all()
+            ]
+            cache.set(key, res_by_resource)
     else:
         # The non admin user see only its own reservartions
-        res_by_resource = [
-            Reservation.objects.filter(resource__slug=resource.slug).filter(
-                user_id=user.id) for resource in Resource.available.all()
-        ]
+        key = f'user_{user.id}_res_by_resource'
+        res_by_resource = cache.get(key)
+        if not res_by_resource:
+            res_by_resource = [
+                Reservation.objects.filter(
+                    resource__slug=resource.slug).filter(user_id=user.id)
+                for resource in Resource.available.all()
+            ]
+            cache.set(key, res_by_resource)
 
     context = {
         'res_by_resource': res_by_resource,

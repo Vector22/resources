@@ -3,6 +3,9 @@ import admin_thumbnails
 
 from core.models import Reservation, Resource, ResourceType, ResourceGallery
 
+# Use memcache admin index site
+admin.site.index_template = 'memcache_status/admin_index.html'
+
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
