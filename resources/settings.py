@@ -39,10 +39,12 @@ INSTALLED_APPS = [
 
     # Thirds apps
     'memcache_status',
+    'rest_framework',
 
     # Customs apps
     'account.apps.AccountConfig',
     'core.apps.CoreConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -159,6 +161,13 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
         'TIMEOUT': 300,  # 300s or 5min for expire time
     }
+}
+
+# Rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
 }
 
 # Default primary key field type

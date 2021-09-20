@@ -30,6 +30,8 @@ urlpatterns = [
     path('core/resource/', include('core.urls')),
     # Generic i18n url
     path('i18n/', include('django.conf.urls.i18n')),
+    # Api url
+    path('api/v1/', include('api.urls')),
 ]
 
 if settings.DEBUG:

@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 
@@ -20,6 +21,13 @@ class ResourceType(models.Model):
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     picture = models.ImageField(null=True, blank=True, upload_to=_upload_link)
+
+    # Override the save method to let api create resource type
+    # while auto populate the slug field
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(ResourceType, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -67,6 +75,13 @@ class Resource(models.Model):
                                 'type_slug': type_slug,
                                 'resource_slug': self.slug
                             })
+
+    # Override the save method to let api create resource
+    # while auto populate the slug field
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Resource, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return _("{} ( {}€ / hour )").format(self.name, self.price)
