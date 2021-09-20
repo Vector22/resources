@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount',
     # 'dj_rest_auth.registration',
 
+    # Schema and documentation
+    'drf_yasg',
+
     # Customs apps
     'account.apps.AccountConfig',
     'core.apps.CoreConfig',
