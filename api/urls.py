@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt import views as jwt_views
 from api.views import (ResourceViewSet, ResourceTypeList, ResourceTypeDetail,
@@ -26,6 +26,11 @@ urlpatterns = [
     path('token/refresh/',
          jwt_views.TokenRefreshView.as_view(),
          name='refresh_token'),
+
+    # Django all auth | Not able to use because of namespace conflict
+    # with the custom account application
+    # path('api/v1/auth/', include('dj_rest_auth.urls')),  # Login Logout ...
+    # path('api/v1/registration/', include('dj_rest_auth.registration.urls')),
 ]
 
 # Routers for viewsets

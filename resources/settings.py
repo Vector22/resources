@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     # Thirds apps
     'memcache_status',
     'rest_framework',
+    # django-allauth + rest-auth | namespace conflict while use account app
+    # 'dj_rest_auth',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'dj_rest_auth.registration',
 
     # Customs apps
     'account.apps.AccountConfig',
@@ -188,6 +194,10 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken', ),
 }
+
+# Django all auth settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_ID = 1
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
