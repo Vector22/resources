@@ -1,6 +1,7 @@
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 from core.models import Resource, ResourceType, ResourceGallery, Reservation
 from api.serializers import (ResourceSerializer, ResourceTypeSerializer,
                              ResourceGallerySerializer, ReservationSerializer)
@@ -67,6 +68,7 @@ class ResourceGalleryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 # Use viewsets for resource object model
 class ResourceViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = ResourceSerializer
 
