@@ -184,4 +184,4 @@ class ReservationDeleteView(LoginRequiredMixin, DeleteView):
     context_object_name = 'reserv'
 
     def get_success_url(self):
-        return reverse_lazy('core:rserv_list')
+        return reverse_lazy('core:reserv_list')
