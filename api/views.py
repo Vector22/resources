@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from core.models import Resource, ResourceType, ResourceGallery, Reservation
 from api.serializers import (ResourceSerializer, ResourceTypeSerializer,
                              ResourceGallerySerializer, ReservationSerializer)
+from api.permissions import IsAuthorOrReadOnly
 
 # Here i use both viewsets and generics as base view
 # viewsets because some times, it's less code to writte.
@@ -114,6 +115,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
 # Use viewsets for reservation object model
 class ReservationViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthorOrReadOnly, )
     serializer_class = ReservationSerializer
 
     def get_queryset(self):
